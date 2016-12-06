@@ -1,21 +1,27 @@
-import Inferno from 'inferno';
-import { firebaseAuth } from '../firebase';
-import firebase from 'firebase';
+import Inferno from 'inferno'
+import { connect } from 'inferno-redux';
+import { login } from '../actions/auth';
 
-function signIn () {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebaseAuth.signInWithRedirect(provider);
-}
+function Auth ({ error, pending, dispatch }) {
 
-export default function Auth () {
-    firebaseAuth.getRedirectResult().then(function(result) {
-        console.log(result);
-    }).catch(function(error) {
-        console.log(error);
-    });
+    const signIn = () => {
+        dispatch(login());
+    }
+
+    const err = (error.length) ? <p>{error}</p> : null;
+
     return (
         <div>
-            <button onClick={signIn}>Sign in with Google</button>
+            {(pending) ?
+                <p>Logging in...</p>
+            :
+                <div>
+                    <button onClick={signIn}>Sign in with Google</button>
+                    {err}
+                </div>
+            }
         </div>
     );
 }
+
+export default connect(state => state.auth)(Auth);

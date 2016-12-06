@@ -36,7 +36,7 @@ const entries = [
         entry: {
             client: './src/client.js'
         },
-        devtool: 'eval',
+        devtool: 'eval-source-map',
         output: {
             filename: '[name].[hash].js',
             path: __dirname + '/dist',

@@ -21,7 +21,6 @@ function Html({ children }) {
             </head>
             <body>
                 <div id="root">{children}</div>
-                <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
                 <script src={'/' + manifest['client.js']}></script>
             </body>
         </html>
@@ -29,18 +28,22 @@ function Html({ children }) {
 }
 
 app.use(async(ctx, next) => {
-    console.log(`Request: ${ctx.url}`);
-    if (ctx.url.match(/client\.[\w|\d]+\.js/)) {
-        await send(ctx, manifest['client.js'], { root: __dirname });
-    } else {
-        const routes = makeRoutes(createHistory({
-            initialEntries: [ctx.url],
-            initialIndex: 0,
-        }));
-        const renderProps = match(routes, ctx.url);
-        const content = (<Html><RouterContext {...renderProps}/></Html>);
+    if (!ctx.url.match(/\/favicon.ico/)) {
+        console.log(`Request: ${ctx.url}`);
+        if (ctx.url.match(/client\.[\w|\d]+\.js/)) {
+            await send(ctx, manifest['client.js'], { root: __dirname });
+        } else {
+            const routes = makeRoutes(createHistory({
+                initialEntries: [ctx.url],
+                initialIndex: 0,
+            }));
+            const renderProps = match(routes, ctx.url);
+            const content = (<Html><RouterContext {...renderProps} /></Html>);
 
-        ctx.body = '<!DOCTYPE html>\n' + renderToString(content);
+            ctx.body = '<!DOCTYPE html>\n' + renderToString(content);
+            await next();
+        }
+    } else {
         await next();
     }
 });

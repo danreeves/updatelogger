@@ -1,10 +1,11 @@
 import Inferno from 'inferno';
-import store from '../store';
+import Component from 'inferno-component';
+import { connect } from 'inferno-redux';
 import Auth from './Auth';
 
 
-export default function App ({ children }) {
-    const state = store.getState();
-    const view = (state.authed) ? <div>{children}</div> : <Auth />;
-    return view;
+function App ({ authed, children }) {
+    return (authed) ? <div>{children}</div> : <Auth></Auth>;
 }
+
+export default connect(state => state.auth)(App);
