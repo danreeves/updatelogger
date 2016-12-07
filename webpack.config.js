@@ -1,37 +1,9 @@
+const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 
-const defaults = {
-    output: {
-        filename: '[name].js',
-        path: __dirname + '/dist',
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/,
-                query: {
-                    presets: [
-                        ['env', { modules: false } ],
-                    ],
-                    plugins: [
-                        'inferno',
-                        'transform-object-rest-spread',
-                    ],
-                }
-            },
-            {
-                test: /\.json$/,
-                loader: 'json-loader',
-            },
-        ],
-    },
-};
-
-const entries = [
+module.exports = [
     {
         entry: {
             client: './src/client.js'
@@ -49,7 +21,17 @@ const entries = [
                     exclude: /node_modules/,
                     query: {
                         presets: [
-                            ['env', { modules: false } ],
+                            [
+                                'env',
+                                {
+                                    modules: false,
+                                    browsers: [
+                                        'last 2 versions',
+                                        'safari 8',
+                                        'not ie <= 10'
+                                    ],
+                                },
+                            ],
                         ],
                         plugins: [
                             'inferno',
@@ -90,6 +72,10 @@ const entries = [
         entry: {
             server: ['babel-polyfill', './src/server.js'],
         },
+        output: {
+            filename: '[name].js',
+            path: __dirname + '/dist',
+        },
         node: {
             console: false,
             process: false,
@@ -98,10 +84,31 @@ const entries = [
             setImmediate: false,
             __filename: false,
             __dirname: false,
-        }
+        },
+        plugins: [
+            new webpack.IgnorePlugin(/vertx/),
+        ],
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader',
+                    exclude: /node_modules/,
+                    query: {
+                        presets: [
+                            ['env', { modules: false, node: true } ],
+                        ],
+                        plugins: [
+                            'inferno',
+                            'transform-object-rest-spread',
+                        ],
+                    }
+                },
+                {
+                    test: /\.json$/,
+                    loader: 'json-loader',
+                },
+            ],
+        },
     },
 ];
-
-module.exports = entries.map((entry) => {
-    return Object.assign({}, defaults, entry);
-});

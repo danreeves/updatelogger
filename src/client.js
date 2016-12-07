@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import Inferno from 'inferno';
 import createBrowserHistory from 'history/createBrowserHistory';
 import makeRoutes from './routes';
