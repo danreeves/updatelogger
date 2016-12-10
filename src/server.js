@@ -12,6 +12,7 @@ const manifest = jsonfile.readFileSync(
     path.join(__dirname, 'build-manifest.json')
 );
 const app = new Koa();
+const port = 3000;
 
 function Html({ children }) {
     return (
@@ -31,7 +32,7 @@ app.use(async(ctx, next) => {
     if (!ctx.url.match(/\/favicon.ico/)) {
         console.log(`Request: ${ctx.url}`);
         if (ctx.url.match(/client\.[\w|\d]+\.js/)) {
-            await send(ctx, manifest['client.js'], { root: __dirname });
+            await send(ctx, ctx.url.replace('/',''), { root: __dirname });
         } else {
             const routes = makeRoutes(createHistory({
                 initialEntries: [ctx.url],
@@ -48,5 +49,5 @@ app.use(async(ctx, next) => {
     }
 });
 
-console.log('Starting...');
-app.listen(3000);
+app.listen(port);
+console.log(`👻  Listening on http://localghost:${port}`)

@@ -16,12 +16,7 @@ export default function auth (oldState = defaultAuth, action) {
             return {
                 ...oldState,
                 authed: true,
-                user: {
-                    accessToken: action.response.credential.accessToken,
-                    displayName: action.response.user.displayName,
-                    email: action.response.user.email,
-                    photoURL: action.response.user.photoURL,
-                },
+                user: action.user,
             };
         case 'LOG_IN_ERROR':
             return {
@@ -30,6 +25,6 @@ export default function auth (oldState = defaultAuth, action) {
                 error: action.error.message,
             }
         default:
-            return Object.assign({}, oldState);
+            return { ...oldState };
     }
 }

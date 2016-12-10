@@ -2,13 +2,14 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = [
     {
         entry: {
             client: './src/client.js'
         },
-        devtool: 'eval-source-map',
+        devtool: 'source-map',
         output: {
             filename: '[name].[hash].js',
             path: __dirname + '/dist',
@@ -64,11 +65,17 @@ module.exports = [
                 fileName: 'build-manifest.json',
             }),
             new StringReplacePlugin(),
+            new webpack.DefinePlugin({
+                'process.env': {
+                    'NODE_ENV': JSON.stringify('production'),
+                },
+            }),
+            new webpack.optimize.UglifyJsPlugin(),
+            new webpack.optimize.OccurrenceOrderPlugin(),
+            new webpack.optimize.AggressiveMergingPlugin(),
         ],
     },
     {
-        target: 'node',
-        devtool: 'inline-source-map',
         entry: {
             server: ['babel-polyfill', './src/server.js'],
         },
@@ -76,6 +83,8 @@ module.exports = [
             filename: '[name].js',
             path: __dirname + '/dist',
         },
+        target: 'node',
+        devtool: 'inline-source-map',
         node: {
             console: false,
             process: false,
