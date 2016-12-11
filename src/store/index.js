@@ -4,8 +4,8 @@ import logger from 'redux-logger';
 import cookieMiddleware from 'redux-effects-universal-cookie';
 import reducers from '../reducers';
 
-const initialState = (typeof window !== 'undefined' && '$$initialState' in window) ?
-    window.$$initialState : undefined;
+const initialState = global.$$initialState || undefined;
+console.log(initialState);
 
 export default function (cookies) {
     const cmid = (cookies) ? cookieMiddleware(cookies) : cookieMiddleware();

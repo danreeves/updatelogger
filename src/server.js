@@ -5,7 +5,6 @@ import { renderToString } from 'react-dom/server';
 import { RouterContext, match } from 'react-router';
 import Koa from 'koa';
 import send from 'koa-send';
-import createHistory from 'history/createMemoryHistory';
 import jsonfile from 'jsonfile';
 import { cookie } from 'redux-effects-universal-cookie';
 import serialize from 'serialize-javascript';
@@ -25,8 +24,8 @@ function HTML ({ html, initialState }) {
             </head>
             <body>
                 <div id="root">${html}</div>
-                <script src="/${manifest['client.js']}"></script>
                 <script>window.$$initialState = ${serialize(initialState, { isJSON: true })};</script>
+                <script src="/${manifest['client.js']}"></script>
             </body>
         </html>
     `;
@@ -38,16 +37,12 @@ app.use(async (ctx, next) => {
         if (ctx.url.match(/client\.[\w|\d]+\.js/)) {
             await send(ctx, ctx.url.replace('/', ''), { root: __dirname });
         } else {
-            const history = createHistory({
-                initialEntries: [ctx.url],
-                initialIndex: 0,
-            });
             const store = createStore(ctx.cookies);
             if (ctx.cookies.get('user')) {
                 const user = JSON.parse(decodeURIComponent(await store.dispatch(cookie('user'))));
                 store.dispatch({ type: 'LOG_IN_SUCCESS', user });
             }
-            const routes = makeRoutes({ history, store });
+            const routes = makeRoutes(store);
             const initialState = store.getState();
             await match({ routes, location: ctx.url }, async (error, redirectLocation, renderProps) => {
                 if (error) console.log(error);
@@ -62,4 +57,4 @@ app.use(async (ctx, next) => {
 });
 
 app.listen(port);
-console.log(`👻  Listening on http://localghost:${port}`);
+console.log(`👻  Listening on http://localhost:${port}`);
