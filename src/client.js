@@ -1,10 +1,11 @@
 import 'babel-polyfill';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import makeRoutes from './routes';
+import { Provider } from 'react-redux';
+import routes from './routes';
 import createStore from './store';
 
 const store = createStore();
-const routes = makeRoutes(store);
 
 // Render HTML on the browser
-ReactDOM.render(routes, document.getElementById('root'));
+ReactDOM.render(<Provider store={store}>{routes}</Provider>, document.getElementById('root'));

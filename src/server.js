@@ -3,12 +3,13 @@ import path from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { RouterContext, match } from 'react-router';
+import { Provider } from 'react-redux';
 import Koa from 'koa';
 import send from 'koa-send';
 import jsonfile from 'jsonfile';
 import { cookie } from 'redux-effects-universal-cookie';
 import serialize from 'serialize-javascript';
-import makeRoutes from './routes';
+import routes from './routes';
 import createStore from './store';
 
 const manifest = jsonfile.readFileSync(path.join(__dirname, 'build-manifest.json'));
@@ -42,11 +43,10 @@ app.use(async (ctx, next) => {
                 const user = JSON.parse(decodeURIComponent(await store.dispatch(cookie('user'))));
                 store.dispatch({ type: 'LOG_IN_SUCCESS', user });
             }
-            const routes = makeRoutes(store);
             const initialState = store.getState();
-            await match({ routes, location: ctx.url }, async (error, redirectLocation, renderProps) => {
+            match({ routes, location: ctx.url }, async (error, redirectLocation, renderProps) => {
                 if (error) console.log(error);
-                const html = renderToString(<RouterContext {...renderProps} />);
+                const html = renderToString(<Provider store={store}><RouterContext {...renderProps} /></Provider>);
                 ctx.body = HTML({ html, initialState });
                 await next();
             });
