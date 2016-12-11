@@ -5,6 +5,7 @@ function Home({ auth }) {
     return <div>
         <h1>Home</h1>
         <p>Hi, { auth.user.displayName }</p>
+        <img src={auth.user.photoURL} />
     </div>;
 }
 

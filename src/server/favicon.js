@@ -1,0 +1,9 @@
+import send from 'koa-send';
+
+export default async (ctx, next) => {
+    if (ctx.url.match(/favicon\.ico/)) {
+        await send(ctx, ctx.url, { root: path.join(__dirname, 'static') });
+    } else {
+        await next();
+    }
+}

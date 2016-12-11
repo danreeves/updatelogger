@@ -104,7 +104,7 @@ module.exports = [
                     exclude: /node_modules/,
                     query: {
                         presets: [
-                            ['env', { modules: false, node: true }],
+                            ['env', { modules: false, node: "current" }],
                             'react',
                         ],
                         plugins: [
