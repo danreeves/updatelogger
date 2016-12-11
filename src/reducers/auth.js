@@ -17,12 +17,19 @@ export default function auth (oldState = defaultAuth, action) {
             ...oldState,
             authed: true,
             user: action.user,
+            pending: false,
         };
     case 'LOG_IN_ERROR':
         return {
             ...oldState,
             pending: false,
             error: action.error.message,
+        };
+    case 'LOG_OUT':
+        return {
+            ...oldState,
+            authed: false,
+            user: {},
         };
     default:
         return { ...oldState };

@@ -2,7 +2,7 @@ import { cookie } from 'redux-effects-universal-cookie';
 import firebase from 'firebase';
 import { firebaseAuth, responseToUser } from '../util/firebase';
 
-export default function login () {
+export function login () {
     return (dispatch) => {
         dispatch({
             type: 'LOG_IN_PENDING',
@@ -24,5 +24,12 @@ export default function login () {
                 error,
             });
         });
+    };
+}
+
+export function logout () {
+    return (dispatch) => {
+        dispatch(cookie('user', undefined));
+        dispatch({ type: 'LOG_OUT' });
     };
 }
