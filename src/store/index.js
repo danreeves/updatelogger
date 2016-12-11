@@ -5,7 +5,6 @@ import cookieMiddleware from 'redux-effects-universal-cookie';
 import reducers from '../reducers';
 
 const initialState = global.$$initialState || undefined;
-console.log(initialState);
 
 export default function (cookies) {
     const cmid = (cookies) ? cookieMiddleware(cookies) : cookieMiddleware();
