@@ -6,4 +6,4 @@ export default async (ctx, next) => {
     } else {
         await next();
     }
-}
+};

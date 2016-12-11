@@ -1,3 +1,4 @@
+import path from 'path';
 import send from 'koa-send';
 
 export default async (ctx, next) => {
@@ -6,4 +7,4 @@ export default async (ctx, next) => {
     } else {
         await next();
     }
-}
+};

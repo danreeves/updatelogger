@@ -5,7 +5,7 @@ const config = {
     authDomain: 'inferno-test.firebaseapp.com',
     databaseURL: 'https://inferno-test.firebaseio.com',
     storageBucket: 'inferno-test.appspot.com',
-    messagingSenderId: '632818211236'
+    messagingSenderId: '632818211236',
 };
 
 export const firebaseApp = firebase.initializeApp(config);
