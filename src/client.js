@@ -1,10 +1,13 @@
 import 'babel-polyfill';
-import Inferno from 'inferno';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import makeRoutes from './routes';
+import createStore from './store';
 
-const browserHistory = createBrowserHistory();
-const routes = makeRoutes(browserHistory);
+const history = createBrowserHistory();
+const store = createStore();
+const routes = makeRoutes({ store, history });
 
 // Render HTML on the browser
-Inferno.render(routes, document.getElementById('root'));
+ReactDOM.render(routes, document.getElementById('root'));

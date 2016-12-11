@@ -7,7 +7,7 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 module.exports = [
     {
         entry: {
-            client: './src/client.js'
+            client: './src/client.js',
         },
         devtool: 'source-map',
         output: {
@@ -29,16 +29,17 @@ module.exports = [
                                     browsers: [
                                         'last 2 versions',
                                         'safari 8',
-                                        'not ie <= 10'
+                                        'not ie <= 10',
                                     ],
                                 },
                             ],
+                            'react',
                         ],
                         plugins: [
-                            'inferno',
                             'transform-object-rest-spread',
+                            'transform-flow-strip-types',
                         ],
-                    }
+                    },
                 },
                 {
                     test: /\.json$/,
@@ -54,7 +55,7 @@ module.exports = [
                                     return '"thisisnotdefinedok"';
                                 },
                             },
-                        ]
+                        ],
                     }),
                 },
             ],
@@ -105,13 +106,14 @@ module.exports = [
                     exclude: /node_modules/,
                     query: {
                         presets: [
-                            ['env', { modules: false, node: true } ],
+                            ['env', { modules: false, node: true }],
+                            'react',
                         ],
                         plugins: [
-                            'inferno',
                             'transform-object-rest-spread',
+                            'transform-flow-strip-types',
                         ],
-                    }
+                    },
                 },
                 {
                     test: /\.json$/,

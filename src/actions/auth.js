@@ -1,4 +1,4 @@
-import cookie from 'js-cookie';
+import { cookie } from 'redux-effects-universal-cookie';
 import firebase from 'firebase';
 import { firebaseAuth, responseToUser } from '../util/firebase';
 
@@ -12,7 +12,7 @@ export function login () {
         const provider = new firebase.auth.GoogleAuthProvider();
         return firebaseAuth.signInWithPopup(provider).then(function(response) {
             const user = responseToUser(response);
-            cookie.set('user', user);
+            dispatch(cookie('user', JSON.stringify(user)));
             dispatch({
                 type: 'LOG_IN_SUCCESS',
                 user,

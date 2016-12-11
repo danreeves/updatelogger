@@ -1,12 +1,12 @@
-import Inferno from 'inferno'
-import { connect } from 'inferno-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 import { login } from '../actions/auth';
 
 function Auth ({ error, pending, dispatch }) {
 
     const signIn = () => {
         dispatch(login());
-    }
+    };
 
     const err = (error.length) ? <p>{error}</p> : null;
 
