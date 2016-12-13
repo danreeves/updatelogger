@@ -5,6 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const pkg = require('./package.json');
 
 module.exports = [
     {
@@ -81,7 +82,9 @@ module.exports = [
         output: {
             filename: '[name].js',
             path: path.join(__dirname, 'dist'),
+            libraryTarget: 'commonjs2',
         },
+        externals: Object.keys(pkg.dependencies),
         target: 'node',
         devtool: 'inline-source-map',
         node: {
@@ -104,7 +107,7 @@ module.exports = [
                     exclude: /node_modules/,
                     query: {
                         presets: [
-                            ['env', { modules: false, node: "current" }],
+                            ['env', { modules: false, node: 'current' }],
                             'react',
                         ],
                         plugins: [
