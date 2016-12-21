@@ -12,13 +12,21 @@ export function login () {
         const provider = new firebase.auth.GoogleAuthProvider();
         return firebaseAuth.signInWithPopup(provider).then((response) => {
             const user = responseToUser(response);
-            dispatch(cookie('user', JSON.stringify(user)));
-            dispatch({
-                type: 'LOG_IN_SUCCESS',
-                user,
-            });
+            if (user.email.match(/^.*@fffunction.co$/)) {
+                dispatch(cookie('user', JSON.stringify(user)));
+                dispatch({
+                    type: 'LOG_IN_SUCCESS',
+                    user,
+                });
+            } else {
+                dispatch({
+                    type: 'LOG_IN_ERROR',
+                    error: {
+                        message: 'You can only log in with a fffunction.co email',
+                    },
+                });
+            }
         }).catch((error) => {
-            console.log(error);
             dispatch({
                 type: 'LOG_IN_ERROR',
                 error,

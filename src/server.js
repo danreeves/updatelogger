@@ -1,9 +1,11 @@
 /* eslint no-param-reassign: 0 */
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import styleSheet from 'styled-components/lib/models/StyleSheet';
 import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
 import Koa from 'koa';
+import serve from 'koa-static';
 import { cookie } from 'redux-effects-universal-cookie';
 
 import favicon from './server/favicon';
@@ -17,6 +19,7 @@ const port = 3000;
 
 app.use(favicon);
 app.use(bundle);
+app.use(serve('static'));
 
 app.use(async (ctx, next) => {
     console.log(`Request: ${ctx.url}`);
@@ -28,11 +31,16 @@ app.use(async (ctx, next) => {
     }
     // Match route in router
     match({ routes, location: ctx.url }, async (error, redirectLocation, renderProps) => {
-        if (error) console.log(error);
-        const html = renderToString(<Provider store={store}><RouterContext {...renderProps} /></Provider>);
-        const initialState = store.getState();
-        ctx.body = HTML({ html, initialState });
-        await next();
+        if (error) {
+            ctx.body = error;
+            await next();
+        } else {
+            const html = renderToString(<Provider store={store}><RouterContext {...renderProps} /></Provider>);
+            const styles = styleSheet.rules().map(rule => rule.cssText).join('\n');
+            const initialState = store.getState();
+            ctx.body = HTML({ html, styles, initialState });
+            await next();
+        }
     });
 });
 

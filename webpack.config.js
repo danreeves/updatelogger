@@ -84,7 +84,7 @@ module.exports = [
             path: path.join(__dirname, 'dist'),
             libraryTarget: 'commonjs2',
         },
-        externals: Object.keys(pkg.dependencies),
+        externals: Object.keys(pkg.dependencies).concat([{'styled-components/lib/models/StyleSheet': 'commonjs styled-components/lib/models/StyleSheet'}]),
         target: 'node',
         devtool: 'inline-source-map',
         node: {

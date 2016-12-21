@@ -8,7 +8,7 @@ function Auth ({ error, pending, dispatch }) {
         dispatch(login());
     };
 
-    const err = (error.length) ? <p>{error}</p> : null;
+    const err = (error) ? <p>{error}</p> : null;
 
     return (
         <div>

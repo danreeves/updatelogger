@@ -1,6 +1,11 @@
 import React from 'react';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { logout } from '../actions/auth';
+
+const Title = styled.h1`
+    color: red;
+`;
 
 function Home ({ auth, dispatch }) {
 
@@ -9,10 +14,12 @@ function Home ({ auth, dispatch }) {
     };
 
     return (<div>
-        <h1>Home</h1>
-        <p>Hi, { auth.user.displayName }</p>
-        <img src={auth.user.photoURL} role="presentation" height="40" width="40" />
-        <button onClick={logOut}>Log out</button>
+        <nav>
+            <Title>Update Logger</Title>
+            <img src={auth.user.photoURL} role="presentation" height="40" width="40" />
+            <p>Hi, { auth.user.displayName }</p>
+            <button onClick={logOut}>Log out</button>
+        </nav>
     </div>);
 }
 
