@@ -5,6 +5,7 @@ import { logout } from '../actions/auth';
 
 const Title = styled.h1`
     color: red;
+    padding: 2em;
 `;
 
 function Home ({ auth, dispatch }) {
