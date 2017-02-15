@@ -45,4 +45,4 @@ app.use(async (ctx, next) => {
 });
 
 app.listen(port);
-console.log(`👻  Listening on http://localhost:${port}`);
+console.log(`> Listening on http://localhost:${port}`);
